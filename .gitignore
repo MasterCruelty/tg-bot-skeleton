@@ -1,0 +1,25 @@
+#Ignora compilati e cache di python
+__pycache__/
+*.py[cod]
+*$py.class
+
+#Ignora questa cartella
+files/
+
+#Ignora le sessioni
+*.session
+*.session-journal
+
+#Ignora il file config.json e il file json_message.json
+config.json
+json_message.json
+
+#Ignora file .db
+*.db
+
+#ignora file .mp3
+*.mp3
+
+#ignora txt
+ip_banned.txt
+unknown_errors.txt
