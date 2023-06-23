@@ -1,0 +1,9 @@
+{
+	"test":{
+		"test_default":"**/test -d ** => it prints <I'm the test default inside multiple test commands!>",
+		"testAdvanced":"**/test -ad ** => it prints <I'm the test advanced!>",
+		"testWeak":"**/test -w ** => it prints <I'm the test weak!>"
+	},
+	"testAlone":"** /test -al ** => it prints <I'm che test alone!>",
+    "default": "Search commands' help here such as: test, testAdvanced, testWeak or testAlone."
+}
