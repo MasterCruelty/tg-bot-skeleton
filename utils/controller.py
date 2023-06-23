@@ -22,11 +22,7 @@ dictionary_super = {'/setuser'        : udb.set_user,
                     '/listgroup'      : udb.list_group,
                     '/delgroup'       : udb.del_group,
                     '/updategroup'    : udb.update_group,
-                    '/allamounts'     : udb.show_all_amounts,
-                    '/setamount'      : udb.set_amount,
-                    '/updatestat'     : udb.force_update_stats,
                     '/restart'        : usys.restart,
-                    '/delstat'        : udb.force_delete_stats}
 
 auth_command = ["/trivial"]
 
