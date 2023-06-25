@@ -11,15 +11,15 @@ db.connect()
 
 
 #############################################################################    
-#### FUNZIONI LEGATE ALLA GESTIONE DEI GRUPPI SALVATI CON COMANDI AUTORIZZATI
+#### FUNCTIONS LINKED TO MANAGEMENT OF SAVED GROUPS WITH AUTHORIZED COMMANDS
 #############################################################################    
 
 """
-    Restituisce la lista dei gruppi autorizzati a certi comandi
+    Return the list of authorized groups to certain commands
 """
 @Client.on_message()
 def list_group(client,message):
-    result = "Gruppi salvati:\n\n"
+    result = "Saved groups:\n\n"
     query = Group.select()
     for group in query:
         result += str(group.id_group) + ";" + group.title + ";" + group.command + "\n"
@@ -27,37 +27,37 @@ def list_group(client,message):
 
 
 """
-    setto il gruppo come unico autorizzato a un particolare comando
+    Setting the group as the only one authorized to execute a certain command
 """
 @Client.on_message()
 def set_group(client,message,query):
-    #splitto sullo spazio poichè l'input è del tipo /setgroup <id gruppo> <comando>
+    #Split on whitespace because the input is like: /setgroup <group id> <command>
     splitted = query.split(" ")
     json_group = client.get_chat(splitted[0])
     group_id = json_group.id
     title = json_group.title
     command = splitted[1]
     
-    #inserisco in db
+    #Insert in db
     group = Group(id_group = group_id,title = title,command = command)
     group.save()
-    #verifico sia inserito correttamente
+    #Verify if insert is done correctly
     query = Group.select().where(Group.id_group == group_id)
     for item in query:
-        result = "Gruppo " + str(item.id_group) + " registrato con comando " + command
+        result = "Group " + str(item.id_group) + " registered with command " + command
     return sendMessage(client,message,result)
 
 """
-    Cancella il gruppo selezionato dai gruppi autorizzati a determinati comandi
+    Delete the selected group from the authorized groups to certain commands
 """
 @Client.on_message()
 def del_group(client,message,query):
     Group.delete().where(Group.id_group == query).execute()
-    result = "Gruppo " + str(query) + " eliminato dai gruppi salvati."
+    result = "Group " + str(query) + " deleted from saved groups."
     return sendMessage(client,message,result)
 
 """
-    Aggiorna il nome di un gruppo sul db
+    Update the group name on db
 """
 @Client.on_message()
 def update_group(client,message,query):
@@ -65,11 +65,11 @@ def update_group(client,message,query):
     (Group
      .update({Group.title: json_group.title})
      .where(Group.id_group == json_group.id)).execute()
-    result = "Gruppo " + str(json_group.id ) + " aggiornato con successo!"
+    result = "Group " + str(json_group.id ) + " updated with success!"
     return sendMessage(client,message,result)
 
 """
-    controllo se il gruppo è autorizzato a eseguire un determinato comando
+    Check if the group is authorized to execute a certain command
 """
 def check_group_command(match,message):
     query = (Group
@@ -77,7 +77,7 @@ def check_group_command(match,message):
             .where((Group.id_group == get_chat(message)) &
                    (Group.command == match))).execute()
 
-    #controllo se vi è almeno un record
+    #check is there's at least one record
     i = 0
     for _ in query:
         i = i + 1
@@ -88,10 +88,10 @@ def check_group_command(match,message):
 
 
 ##############################################################    
-#### FUNZIONI LEGATE ALLA GESTIONE DEGLI UTENTI SALVATI SUL DB
+#### FUNCTIONS LINKED TO MANAGEMENT OF USERS
 ##############################################################    
 """
-questa funzione fa una select dalla tabella User e restituisce gli id di tutti gli utenti registratii dentro una lista di int
+This function do a select from User table and return all user ids in a int list
 """
 
 def list_id_users():
@@ -103,12 +103,12 @@ def list_id_users():
     return result
 
 """
-questa funzione fa una select dalla tabella User e restituisce i dati di tutti gli utenti in un dato gruppo.
-Oppure tutti gli utenti se dato il comando in chat privata
+This function do a select from the user table and return the data of all registered user in a certain group.
+Otherwise all user data if used in a private chat.
 """
 @Client.on_message()
 def list_user(client,message):
-    result = "Lista utenti salvati:\n\n"
+    result = "Saved users:\n\n"
     query = User.select()
     config = get_config_file("config.json")
     id_super_admin = config["id_super_admin"].split(";")
@@ -125,7 +125,7 @@ def list_user(client,message):
     return sendMessage(client,message,result)
 
 """
-questa funzione è simile a list_user ma restituisce solo il numero degli utenti registrati nella tabella User
+This function is similar to list_user but return only the number of registered user
 """
 
 def all_user(client,message):
@@ -133,11 +133,11 @@ def all_user(client,message):
     query = User.select()
     for user in query:
         count += 1
-    result = "Totale utenti registrati: " + str(count)
+    result = "Saved users: " + str(count)
     return sendMessage(client,message,result)
 
 """
-questa funzione permette di registrare un nuovo utente nella tabella User
+This function allow to register a new user in user table
 """
 @Client.on_message()
 def set_user(client,message,query):
@@ -149,14 +149,14 @@ def set_user(client,message,query):
     try:
         user.save()
     except:
-        return sendMessage(client,message,"Utente già registrato")
+        return sendMessage(client,message,"User already registered")
     query = User.select().where(User.id_user == userid)
     for user in query:
-        result = "Utente " + str(user.id_user) + " salvato!"
+        result = "User " + str(user.id_user) + " saved!"
     return sendMessage(client,message,result) 
 
 """
-    update dei dati sul db di un utente specifico
+    Update of db data of specific user
 """
 @Client.on_message()
 def update_user(client,message,query):
@@ -167,22 +167,22 @@ def update_user(client,message,query):
     (User
      .update(name = nome_utente,username = username_utente)
      .where(User.id_user == userid)).execute()
-    result = "Dati aggiornati per utente " + str(userid)
+    result = "Data updated for user " + str(userid)
     return sendMessage(client,message,result)
 
 """
-Questa funzione elimina un utente dalla tabella User
+This function delete a user from the user table
 """
 @Client.on_message()
 def del_user(client,message,query):
     json_user = client.get_users(query)
     userid = json_user.id
     query = User.delete().where(User.id_user == userid).execute()
-    result = "Utente " + str(userid) + " eliminato."
+    result = "User " + str(userid) + " deleted."
     return sendMessage(client,message,result)
 
 """
-Questa funzione controlla se un certo utente Telegram è registrato nella tabella User
+This function check if a certain Telegram user is registered in User table
 """
 
 def isUser(id_utente):
@@ -195,7 +195,7 @@ def isUser(id_utente):
         return False
 
 """
-questa funzione permette di registrare un nuovo admin nella tabella Admin
+This function allow to register a new admin in User table
 """
 @Client.on_message()
 def set_admin(client,message,query):
@@ -208,25 +208,25 @@ def set_admin(client,message,query):
         admin.save()
     except:
         admin = User.update({User.admin: True}).where(User.id_user == userid).execute()
-        return sendMessage(client,message,"Permessi admin aggiunti a " + str(userid))
+        return sendMessage(client,message,"Rights added to user " + str(userid))
     query = User.select().where(User.id_user == userid)
     for admin in query:
-        result = "Admin " + str(admin.id_user) + " salvato!"
+        result = "Admin " + str(admin.id_user) + " saved!"
     return sendMessage(client,message,result)
 
 """
-Questa funzione elimina un admin  dalla tabella Admin
+This function delete an admin from the User table
 """
 @Client.on_message()
 def del_admin(client,message,query):
     json_user = client.get_users(query)
     userid = json_user.id
     query = User.update({User.admin: False}).where(User.id_user == userid).execute()
-    result = "Admin " + str(userid) + " revocato."
+    result = "Admin " + str(userid) + " revoked."
     return sendMessage(client,message,result) 
 
 """
-Questa funzione controlla se un certo utente Telegram è registrato nella tabella Admin
+This function check if a certain Telegram user is an admin or not
 """
 
 def isAdmin(id_utente):
@@ -240,7 +240,7 @@ def isAdmin(id_utente):
         return False
 
 """
-Questa funzione controlla se un certo utente Telegram è SuperAdmin
+this function check id a Telegram user is the super admin
 """
 
 def isSuper(id_utente):
