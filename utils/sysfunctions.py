@@ -8,29 +8,29 @@ import sys
 
 
 """
-Restituisce il json intero di un messaggio. Se il json supera la capacità di un messaggio Telegram, viene inviato sotto forma di file.
+Return the entire json of a Telegram message. If the json is over the message capacity, it will be saved on a text file and sended.
 """
 @Client.on_message()
 def get_message(query,client,message):
     chat = ugc.get_chat(message)
     uct.save_json(message)
-    client.send_document(chat,document = "json_message.json",caption = "__Ecco il json prodotto dal messaggio__",reply_to_message_id=message.id)
+    client.send_document(chat,document = "json_message.json",caption = "__Here the json of the message__",reply_to_message_id=message.id)
 
 """
-Veloce controllo se l'app è online
+Ping the bot to check if it's on
 """
 def ping(query,client,message):
     return ugc.sendMessage(client,message,"pong " + query.replace("/pingrob",""))
 
 """
-Riavvia il bot
+Restart the bot
 """
 def restart(client,message):
-    ugc.sendMessage(client,message,"__Riavviando...\n\nTra circa 10 secondi dovrei essere di nuovo attivo.__")
+    ugc.sendMessage(client,message,"__Restarting...\n\nIn ten seconds I should be on again.__")
     os.execl(sys.executable,sys.executable,*sys.argv)
 
 """
-documentazione dei comandi utente direttamente su Telegram
+Documentation of user commands directly on Telegram with a command
 """
 def help(query,client,message):
     help_file = ugc.get_config_file("help.json")
@@ -39,7 +39,7 @@ def help(query,client,message):
         help_request = str(help_request).replace("(","").replace(")","").replace('"','').replace(r'\n','\n')
         return ugc.sendMessage(client,message,help_request)
     elif (query not in help_file) and (query != "/helprob"):
-        help_request = "__**Comando non trovato**__\n\n"
+        help_request = "__**Command not found**__\n\n"
         help_request += help_file["default"]
         return ugc.sendMessage(client,message,help_request)
     else:
