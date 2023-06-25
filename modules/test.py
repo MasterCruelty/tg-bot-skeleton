@@ -1,6 +1,6 @@
 from utils.get_config import sendMessage
 
-
+#functioning explained in help.json
 def test_fetch(query,client,message):
     if "-d" in query:
         return sendMessage(client,message,"I'm the test default inside multiple test commands!")
