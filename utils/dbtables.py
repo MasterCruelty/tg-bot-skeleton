@@ -23,8 +23,8 @@ class User(BaseModel):
 
 
 """
-    Tabella gruppi per autorizzare un comando solo all'interno di alcuni gruppi
-    Campi:
+    Group table to authorize a command only in certain group chats.
+    Fields:
     id gruppo
     nome gruppo
     nome comando
@@ -37,7 +37,7 @@ class Group(BaseModel):
 db.connect()
 db.create_tables([User,Group])
 
-#Inizializzo il super admin da file di configurazione
+#Initialize the superadmin from the configuration file
 overlord = User(id_user = id_super_admin[0], name = id_super_admin[1], username = id_super_admin[2], admin = True, superadmin = True)
 try:
     overlord.save()
