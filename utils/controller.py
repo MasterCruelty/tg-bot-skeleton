@@ -23,6 +23,7 @@ dictionary_super = {'/setuser'        : udb.set_user,
                     '/delgroup'       : udb.del_group,
                     '/updategroup'    : udb.update_group,
                     '/restart'        : usys.restart,
+}
 
 auth_command = ["/trivial"]
 
@@ -34,14 +35,12 @@ def fetch_command(match,query,client,message):
     if udb.check_group_command(match,message) and match in auth_command:
         return ugc.sendMessage(client,message,"__Command not authorized in this chat.\nContact the admin @nickname.")
     else:
-        udb.update_stats(ugc.get_id_user(message),match)
         dictionary[match](query,client,message)
 """
    The same as fetch_command, but for admin's command.
 """
 def fetch_admin_command(match,query,client,message):
     #system functions
-    udb.update_stats(ugc.get_id_user(message),match)
     dictionary_admin[match](query,client,message)
 
 """

@@ -5,7 +5,7 @@
 	"path_db":"YOUR PATH/DATABASE.db",
 	"session_name":"YOUR SESSION NAME",
 	"commands":{
-		"user_commands":"/test;COMMAND2;COMMAND3;COMMAND_N",
+		"user_commands":"/test;/help;COMMAND2;COMMAND3;COMMAND_N",
 		"admin_commands":"/getmessage;ADMIN_COMMAND2;ADMIN_COMMAND3;ADMIN_COMMAND_N",
 		"super_admin_commands":"/restart;SUPER_COMMAND2;SUPER_COMMAND3;SUPER_COMMAND_N"
 	}
